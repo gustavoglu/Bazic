@@ -10,7 +10,7 @@ namespace Bazic.Domain.Interfaces.Repositorys
         T Criar(T obj);
         T Atualizar(T obj);
         bool Deletar(Guid id);
-        T TrazerPorId(Guid id)
+        T TrazerPorId(Guid id);
         IEnumerable<T> Pesquisar(Expression<Func<T,bool>> predicate);
         IEnumerable<T> TrazerTodos();
         IEnumerable<T> TrazerTodosAtivos();

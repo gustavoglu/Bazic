@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bazic.Domain", "src\Bazic.Domain\Bazic.Domain.csproj", "{24AAA5CB-6BBB-4578-AE2B-0446B843D476}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bazic.Domain", "src\Bazic.Domain\Bazic.Domain.csproj", "{24AAA5CB-6BBB-4578-AE2B-0446B843D476}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bazic.Domain.Core", "src\Bazic.Domain.Core\Bazic.Domain.Core.csproj", "{D7A94905-DDFD-4F07-99B5-E4C808147A68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bazic.Domain.Core", "src\Bazic.Domain.Core\Bazic.Domain.Core.csproj", "{D7A94905-DDFD-4F07-99B5-E4C808147A68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bazic.Infra.Data", "src\Bazic.Infra\Bazic.Infra.Data.csproj", "{7D2CF76E-BAAB-4CCA-84AE-2760D8A66368}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bazic.Infra.Data", "src\Bazic.Infra\Bazic.Infra.Data.csproj", "{7D2CF76E-BAAB-4CCA-84AE-2760D8A66368}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bazic.Infra.Identity", "Bazic.Infra.Identity\Bazic.Infra.Identity.csproj", "{56DD4E25-79D7-4390-90F2-C25562C4AA0E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bazic.Application", "src\Bazic.Application\Bazic.Application.csproj", "{E4DCCC30-663B-4657-B8A5-B2FFE0731573}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bazic.Application", "src\Bazic.Application\Bazic.Application.csproj", "{E4DCCC30-663B-4657-B8A5-B2FFE0731573}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Infra", "2 - Infra", "{D68B4CF2-E611-4862-930B-C5EB23256DF5}"
 EndProject
@@ -21,9 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Application", "3 - Appl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Service", "4 - Service", "{7D3CEBD0-7FB6-4BC8-A20C-F1D1920547EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bazic.Service.Api", "src\Bazic.Service\Bazic.Service.Api.csproj", "{E55143DF-D740-4372-86A1-E9C904961F33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bazic.Service.Api", "src\Bazic.Service\Bazic.Service.Api.csproj", "{E55143DF-D740-4372-86A1-E9C904961F33}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Presentation", "5 - Presentation", "{C6F48674-FE0D-4BAE-88E7-89C8983FEE07}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bazic.Infra.Identity", "src\Bazic.Infra.Identity\Bazic.Infra.Identity.csproj", "{34248B37-CC9B-4287-AC13-7E206384B239}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +43,6 @@ Global
 		{7D2CF76E-BAAB-4CCA-84AE-2760D8A66368}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D2CF76E-BAAB-4CCA-84AE-2760D8A66368}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D2CF76E-BAAB-4CCA-84AE-2760D8A66368}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56DD4E25-79D7-4390-90F2-C25562C4AA0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56DD4E25-79D7-4390-90F2-C25562C4AA0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56DD4E25-79D7-4390-90F2-C25562C4AA0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56DD4E25-79D7-4390-90F2-C25562C4AA0E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E4DCCC30-663B-4657-B8A5-B2FFE0731573}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E4DCCC30-663B-4657-B8A5-B2FFE0731573}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4DCCC30-663B-4657-B8A5-B2FFE0731573}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -55,6 +51,10 @@ Global
 		{E55143DF-D740-4372-86A1-E9C904961F33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E55143DF-D740-4372-86A1-E9C904961F33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E55143DF-D740-4372-86A1-E9C904961F33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34248B37-CC9B-4287-AC13-7E206384B239}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34248B37-CC9B-4287-AC13-7E206384B239}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34248B37-CC9B-4287-AC13-7E206384B239}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34248B37-CC9B-4287-AC13-7E206384B239}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,9 +63,9 @@ Global
 		{24AAA5CB-6BBB-4578-AE2B-0446B843D476} = {2EAC1EA5-2D97-4A70-B438-291EEF1469FF}
 		{D7A94905-DDFD-4F07-99B5-E4C808147A68} = {2EAC1EA5-2D97-4A70-B438-291EEF1469FF}
 		{7D2CF76E-BAAB-4CCA-84AE-2760D8A66368} = {D68B4CF2-E611-4862-930B-C5EB23256DF5}
-		{56DD4E25-79D7-4390-90F2-C25562C4AA0E} = {D68B4CF2-E611-4862-930B-C5EB23256DF5}
 		{E4DCCC30-663B-4657-B8A5-B2FFE0731573} = {F70AFD39-4E39-42DF-990D-CF04B5811363}
 		{E55143DF-D740-4372-86A1-E9C904961F33} = {7D3CEBD0-7FB6-4BC8-A20C-F1D1920547EE}
+		{34248B37-CC9B-4287-AC13-7E206384B239} = {D68B4CF2-E611-4862-930B-C5EB23256DF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D85891D-4DBA-4156-B5CB-5EE4C7F57DB7}
