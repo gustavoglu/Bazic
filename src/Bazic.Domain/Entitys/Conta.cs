@@ -7,5 +7,8 @@ namespace Bazic.Domain.Entitys
     {
         public string NomeCompleto { get; set; }
         public Guid Id_contaTipo { get; set; }
+
+
+        public virtual ContaTipo ContaTipo { get; set; }
     }
 }

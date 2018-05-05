@@ -1,56 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Bazic.Domain.Core.Entitys;
 using Bazic.Domain.Interfaces.Repositorys;
+using Bazic.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bazic.Infra.Data.Repositorys
 {
     public class Repository<T> : IRepository<T> where T : EntityBase
     {
-        public Repository()
-        {
+        protected BazicContext _context { get; private set; }
+        protected DbSet<T> dbSet { get; private set; }
 
+        public Repository(BazicContext context)
+        {
+            _context = context;
+            dbSet = _context.Set<T>();
         }
 
-        public T Atualizar(T obj)
+        public async Task<T> Atualizar(T obj)
         {
-            throw new NotImplementedException();
+            dbSet.Update(obj);
+            await SaveChanges();
+            return await TrazerPorId(obj.Id);
         }
 
-        public T Criar(T obj)
+        public async Task<T> Criar(T obj)
         {
-            throw new NotImplementedException();
+            await dbSet.AddAsync(obj);
+            await SaveChanges();
+            return await TrazerPorId(obj.Id);
         }
 
-        public bool Deletar(Guid id)
+        public async Task<T> Deletar(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await TrazerPorId(id);
+            dbSet.Remove(entity);
+            await SaveChanges();
+            return await TrazerPorId(id);
         }
 
         public IEnumerable<T> Pesquisar(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return dbSet.Where(predicate);
         }
 
-        public T TrazerPorId(Guid id)
+        public async Task<T> TrazerPorId(Guid id)
         {
-            throw new NotImplementedException();
+            return await dbSet.FindAsync(id);
         }
 
         public IEnumerable<T> TrazerTodos()
         {
-            throw new NotImplementedException();
+            return dbSet;
         }
 
         public IEnumerable<T> TrazerTodosAtivos()
         {
-            throw new NotImplementedException();
+            return dbSet.Where(e => !e.Deletado);
         }
 
         public IEnumerable<T> TrazerTodosDeletados()
         {
-            throw new NotImplementedException();
+            return dbSet.Where(e => e.Deletado);
+        }
+
+        private async Task<bool> SaveChanges()
+        {
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<IEnumerable<T>> CriarVarios(List<T> objs)
+        {
+            await dbSet.AddRangeAsync(objs);
+            await SaveChanges();
+            return objs;
+        }
+
+        public async Task<bool> DeletarVarios(List<T> objs)
+        {
+            dbSet.RemoveRange(objs);
+            return await SaveChanges();
         }
     }
 }
