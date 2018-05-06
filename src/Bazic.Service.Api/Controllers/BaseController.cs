@@ -1,4 +1,5 @@
-﻿using Flunt.Notifications;
+﻿using Bazic.Domain.Core.Notifications;
+using Flunt.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,54 +9,46 @@ namespace Bazic.Service.Api.Controllers
     [Produces("application/json")]
     public abstract class BaseController : Controller
     {
-        protected BaseController()
+        private readonly IDomainNotificationHandler<DomainNotification> _notifications;
+
+        protected BaseController(IDomainNotificationHandler<DomainNotification> notifications)
         {
-            this.Notifications = new List<Notification>();
+            _notifications = notifications;
         }
 
-        protected List<Notification> Notifications { get; set; }
-
-        protected bool HasNotification { get { return Notifications.Any(); } }
+        protected bool HasNotification { get { return _notifications.HasNotification(); } }
 
         protected new IActionResult Response(object obj = null, string msg = null)
         {
-         
+            AddErrosModelStateInNotifications();
+
             if (HasNotification)
-                return BadRequest( new { success = false, message = msg, data = Notifications });
+                return BadRequest(new { success = false, message = msg, data = ErrosNotifications() });
 
-            return Ok( new { success = true, message = msg, data = obj });
+            return Ok(new { success = true, message = msg, data = obj });
         }
 
-        protected void ErrosModelStateNotification(Notifiable notifiable = null)
+        protected void AddErrosModelStateInNotifications()
         {
             var errosModelState = ModelState.Values.SelectMany(v => v.Errors);
-            var erros = errosModelState.Select(e => new Notification("ModelState",e.ErrorMessage)).ToList();
-            if (notifiable != null) notifiable.Notifications.ToList().ForEach(n => erros.Add(n));
-            erros.ForEach(e => Notifications.Add(e));
+            var erros = errosModelState.Select(e => new DomainNotification("ModelState", e.ErrorMessage)).ToList();
+            erros.ForEach(e => _notifications.Handler(e));
         }
 
-        protected void ErrosModelStateNotification(List<Notifiable> notifiables = null)
+        protected void AddErroInNotifications(string key, string value)
         {
-            var errosModelState = ModelState.Values.SelectMany(v => v.Errors);
-            var erros = errosModelState.Select(e => new Notification("ModelState", e.ErrorMessage)).ToList();
-            if (notifiables != null && notifiables.Any()) ErrosNotifications(notifiables);
+            this._notifications.Handler(new DomainNotification(key, value));
         }
 
-        protected void ErrosNotifications(List<Notifiable> notifiables)
+        protected void AddErrosNotifiableInNotifications(Notifiable notifiable)
         {
-            bool exist = notifiables.Exists(n => !n.Valid);
-            if (!exist) return ;
-
-            var notifications = (from notifiable in notifiables
-                                 from notification in notifiable.Notifications
-                                 select notification).ToList();
-
-            notifications.ForEach(n => Notifications.Add(n));
+            if (notifiable.Valid) return;
+            notifiable.Notifications.ToList().ForEach(n => _notifications.Handler(new DomainNotification(n.Property, n.Message)));
         }
 
-        protected void AdicionaErroModelState(string key, string value)
+        protected object ErrosNotifications()
         {
-            this.Notifications.Add(new Notification(key, value));
+            return _notifications.GetNotifications().Select(n => new { Key = n.Key, Value = n.Value }).ToList();
         }
 
     }

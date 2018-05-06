@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bazic.Domain.Core.Notifications;
 using Bazic.Domain.Interfaces.Repositorys;
 using Bazic.Infra.Data.Context;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,10 @@ namespace Bazic.Service.Api.Controllers
     [Route("api/[controller]")]
     public class ValuesController : BaseController
     {
+        public ValuesController(IDomainNotificationHandler<DomainNotification> notifications) : base(notifications)
+        {
+        }
+
         // GET api/values
         [HttpGet]
         public IActionResult Get([FromServices]IContaRepository contaRepository)

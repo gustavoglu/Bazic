@@ -1,10 +1,11 @@
 ﻿using Bazic.Application.Interfaces;
 using Bazic.Application.ViewModels;
+using Bazic.Domain.Core.Notifications;
 using Bazic.Domain.Entitys;
 using Bazic.Domain.Interfaces.Repositorys;
+using Bazic.Domain.Interfaces.UoW;
 using Bazic.Infra.Identity.Interfaces;
 using Bazic.Infra.Identity.Models;
-using Flunt.Notifications;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Bazic.Application.Services
     {
         private readonly IContaRepository _contaRepository;
         private readonly IUsuarioService _usuarioService;
-        public ContaService(IContaRepository contaRepository, IUsuarioService usuarioService)
+        public ContaService(IContaRepository contaRepository, IUsuarioService usuarioService, IUnitOfWork uow, IDomainNotificationHandler<DomainNotification> notifications) : base(notifications,uow)
         {
             _contaRepository = contaRepository;
             _usuarioService = usuarioService;
@@ -30,7 +31,7 @@ namespace Bazic.Application.Services
         {
             var usuario = await _usuarioService.TrazerPorId(conta.Id.ToString());
             if (usuario == null) return false;
-            var result = await _usuarioService.AlterarSenha(usuario,novaSenha,senhaAtual);
+            var result = await _usuarioService.AlterarSenha(usuario, novaSenha, senhaAtual);
             if (!result.Succeeded) return false;
             return true;
         }
@@ -46,9 +47,11 @@ namespace Bazic.Application.Services
             string id_usuario = conta.Id.ToString();
             Usuario usuario = new Usuario { Id = id_usuario, Email = model.Email, UserName = model.Email };
             var result = await _usuarioService.Criar(usuario, model.Senha);
-            if (!result.Succeeded) { AdicionaErrosIdentityResylt(result); return null; };
-            var contaCriada = await _contaRepository.Criar(conta);
-            return contaCriada;
+            if (!result.Succeeded) { AdicionaErrosIdentityResult(result); return null; };
+            _contaRepository.Criar(conta);
+            bool resultSave = SaveChanges();
+            if (!resultSave) return null;           
+            return await _contaRepository.TrazerPorId(conta.Id);
         }
 
         public bool Deletar(Guid id_conta)
@@ -56,15 +59,13 @@ namespace Bazic.Application.Services
             throw new NotImplementedException();
         }
 
-        public override void Validate()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void AdicionaErrosIdentityResylt(IdentityResult identityResult)
+        private void AdicionaErrosIdentityResult(IdentityResult identityResult)
         {
             if (identityResult.Succeeded) return;
-            identityResult.Errors.ToList().ForEach(e => AddNotification(new Notification("Identity", e.Description)));
+            identityResult.Errors.ToList().ForEach(e => AddNotification("Identity", e.Description));
         }
+
+        
+
     }
 }

@@ -1,8 +1,11 @@
 ﻿using Bazic.Application.Interfaces;
 using Bazic.Application.Services;
+using Bazic.Domain.Core.Notifications;
 using Bazic.Domain.Interfaces.Repositorys;
+using Bazic.Domain.Interfaces.UoW;
 using Bazic.Infra.Data.Context;
 using Bazic.Infra.Data.Repositorys;
+using Bazic.Infra.Data.UoW;
 using Bazic.Infra.Identity.Context;
 using Bazic.Infra.Identity.Interfaces;
 using Bazic.Infra.Identity.Services;
@@ -14,9 +17,13 @@ namespace Bazic.Infra.IoC
     {
         public static void Configure(IServiceCollection service)
         {
+            //DOMAIN
+            service.AddScoped<IDomainNotificationHandler<DomainNotification>,DomainNotificationHandler> ();
+
             //DATA
             service.AddScoped<BazicContext>();
             service.AddScoped<ContextIdentity>();
+            service.AddScoped<IUnitOfWork, UnitOfWork>();
 
             //REPOSITORY
             service.AddScoped<IContaRepository, ContaRepository>();

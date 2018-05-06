@@ -21,26 +21,20 @@ namespace Bazic.Infra.Data.Repositorys
             dbSet = _context.Set<T>();
         }
 
-        public async Task<T> Atualizar(T obj)
+        public void Atualizar(T obj)
         {
             dbSet.Update(obj);
-            await SaveChanges();
-            return await TrazerPorId(obj.Id);
         }
 
-        public async Task<T> Criar(T obj)
+        public async void Criar(T obj)
         {
             await dbSet.AddAsync(obj);
-            await SaveChanges();
-            return await TrazerPorId(obj.Id);
         }
 
-        public async Task<T> Deletar(Guid id)
+        public async void Deletar(Guid id)
         {
             var entity = await TrazerPorId(id);
             dbSet.Remove(entity);
-            await SaveChanges();
-            return await TrazerPorId(id);
         }
 
         public IEnumerable<T> Pesquisar(Expression<Func<T, bool>> predicate)
@@ -68,22 +62,14 @@ namespace Bazic.Infra.Data.Repositorys
             return dbSet.Where(e => e.Deletado);
         }
 
-        private async Task<bool> SaveChanges()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
-
-        public async Task<IEnumerable<T>> CriarVarios(List<T> objs)
+        public async void CriarVarios(List<T> objs)
         {
             await dbSet.AddRangeAsync(objs);
-            await SaveChanges();
-            return objs;
         }
 
-        public async Task<bool> DeletarVarios(List<T> objs)
+        public void DeletarVarios(List<T> objs)
         {
             dbSet.RemoveRange(objs);
-            return await SaveChanges();
         }
     }
 }
