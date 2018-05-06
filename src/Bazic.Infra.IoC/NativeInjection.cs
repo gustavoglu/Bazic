@@ -1,6 +1,9 @@
-﻿using Bazic.Domain.Interfaces.Repositorys;
+﻿using Bazic.Application.Interfaces;
+using Bazic.Application.Services;
+using Bazic.Domain.Interfaces.Repositorys;
 using Bazic.Infra.Data.Context;
 using Bazic.Infra.Data.Repositorys;
+using Bazic.Infra.Identity.Context;
 using Bazic.Infra.Identity.Interfaces;
 using Bazic.Infra.Identity.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +16,7 @@ namespace Bazic.Infra.IoC
         {
             //DATA
             service.AddScoped<BazicContext>();
+            service.AddScoped<ContextIdentity>();
 
             //REPOSITORY
             service.AddScoped<IContaRepository, ContaRepository>();
@@ -20,6 +24,7 @@ namespace Bazic.Infra.IoC
 
             //SERVICES
             service.AddScoped<IUsuarioService, UsuarioService>();
+            service.AddScoped<IContaService, ContaService>();
         }
     }
 }

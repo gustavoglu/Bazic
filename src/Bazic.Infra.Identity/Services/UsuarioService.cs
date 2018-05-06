@@ -18,9 +18,12 @@ namespace Bazic.Infra.Identity.Services
             return await _userManager.ChangeEmailAsync(usuario, novoEmail, null);
         }
 
-        public async Task<IdentityResult> AlterarSenha(Usuario usuario, string senhaAtual, string novaSenha)
+        public async Task<IdentityResult> AlterarSenha(Usuario usuario, string novaSenha, string senhaAtual = null)
         {
-            return await _userManager.ChangePasswordAsync(usuario, senhaAtual, novaSenha);
+            if (senhaAtual != null)
+                return await _userManager.ChangePasswordAsync(usuario, senhaAtual, novaSenha);
+
+            return await _userManager.ResetPasswordAsync(usuario,null,novaSenha);
         }
 
         public async Task<IdentityResult> Atualizar(Usuario usuario)
@@ -49,5 +52,9 @@ namespace Bazic.Infra.Identity.Services
             return await _userManager.FindByEmailAsync(email);
         }
 
+        public void Dispose()
+        {
+            _userManager.Dispose();
+        }
     }
 }

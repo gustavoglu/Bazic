@@ -1,10 +1,11 @@
 ﻿using Bazic.Infra.Identity.Models;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Threading.Tasks;
 
 namespace Bazic.Infra.Identity.Interfaces
 {
-    public interface IUsuarioService
+    public interface IUsuarioService : IDisposable
     {
         Task<IdentityResult> Criar(Usuario usuario, string senha);
         Task<IdentityResult> AlterarSenha(Usuario usuario, string senhaAtual ,string novaSenha);

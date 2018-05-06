@@ -5,11 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <PackageReference Include="Flunt" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Bazic.Domain\Bazic.Domain.csproj" />
+    <ProjectReference Include="..\Bazic.Infra.Identity\Bazic.Infra.Identity.csproj" />
   </ItemGroup>
 
 </Project>
