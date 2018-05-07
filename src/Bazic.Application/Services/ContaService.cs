@@ -43,7 +43,7 @@ namespace Bazic.Application.Services
 
         public async Task<Conta> Criar(NovaContaViewModel model)
         {
-            Conta conta = new Conta { NomeCompleto = model.NomeCompleto, Id_contaTipo = Guid.Parse("D43849B6-3A8E-42BF-84A2-0A16E70D6D8D") };
+            Conta conta = new Conta { NomeCompleto = model.NomeCompleto, Id_contaTipo = model.Id_contaTipo };
             string id_usuario = conta.Id.ToString();
             Usuario usuario = new Usuario { Id = id_usuario, Email = model.Email, UserName = model.Email };
             var result = await _usuarioService.Criar(usuario, model.Senha);
@@ -59,13 +59,18 @@ namespace Bazic.Application.Services
             throw new NotImplementedException();
         }
 
+        public async Task<bool> Login(LoginViewModel loginViewModel)
+        {
+            var result  =  await _usuarioService.Login(loginViewModel.UserName, loginViewModel.Senha);
+            if (result.Succeeded) return true;
+            notifications.Handler(new DomainNotification("Login", "Não foi possivel se logar, favor verificar seu usuario e senha"));
+            return false;
+        }
+
         private void AdicionaErrosIdentityResult(IdentityResult identityResult)
         {
             if (identityResult.Succeeded) return;
             identityResult.Errors.ToList().ForEach(e => AddNotification("Identity", e.Description));
         }
-
-        
-
     }
 }

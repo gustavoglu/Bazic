@@ -14,5 +14,6 @@ namespace Bazic.Infra.Identity.Interfaces
         Task<IdentityResult> Atualizar(Usuario usuario);
         Task<Usuario> TrazerPorId(string id);
         Task<Usuario> TrazerPorEmail(string email);
+        Task<SignInResult> Login(string userName, string senha);
     }
 }

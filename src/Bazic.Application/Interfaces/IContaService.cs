@@ -13,6 +13,7 @@ namespace Bazic.Application.Interfaces
         bool Deletar(Guid id_conta); 
         Task<bool> AlterarSenha(Conta conta,string novaSenha, string senhaAtual = null);
         Task<bool> AlterarEmail(Conta conta, string novoEmail);
+        Task<bool> Login(LoginViewModel loginViewModel);
 
     }
 }

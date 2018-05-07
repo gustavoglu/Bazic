@@ -7,7 +7,7 @@ namespace Bazic.Application.Services
 {
     public abstract class ServiceValidation
     {
-        private readonly IDomainNotificationHandler<DomainNotification> notifications;
+        protected readonly IDomainNotificationHandler<DomainNotification> notifications;
         private readonly IUnitOfWork _uow;
 
         public ServiceValidation(IDomainNotificationHandler<DomainNotification> _notifications, IUnitOfWork uow)

@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Bazic.Domain.Core.Notifications;
 using Bazic.Domain.Interfaces.Repositorys;
 using Bazic.Infra.Data.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bazic.Service.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class ValuesController : BaseController
     {
@@ -18,7 +20,7 @@ namespace Bazic.Service.Api.Controllers
 
         // GET api/values
         [HttpGet]
-        public IActionResult Get([FromServices]IContaRepository contaRepository)
+        public IActionResult Get()
         {
             return Response (new string[] { "value1", "value2" },"Ok");
         }

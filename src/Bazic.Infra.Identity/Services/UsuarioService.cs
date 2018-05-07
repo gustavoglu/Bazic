@@ -8,10 +8,12 @@ namespace Bazic.Infra.Identity.Services
     public class UsuarioService : IUsuarioService
     {
         private readonly UserManager<Usuario> _userManager;
+        private readonly SignInManager<Usuario> _signInManager;
 
-        public UsuarioService(UserManager<Usuario> userManager)
+        public UsuarioService(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
         public async Task<IdentityResult> AlterarEmail(Usuario usuario, string novoEmail)
         {
@@ -55,6 +57,11 @@ namespace Bazic.Infra.Identity.Services
         public void Dispose()
         {
             _userManager.Dispose();
+        }
+
+        public async Task<SignInResult> Login(string userName, string senha)
+        {
+            return await _signInManager.PasswordSignInAsync(userName, senha, false, false);
         }
     }
 }

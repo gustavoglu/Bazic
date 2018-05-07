@@ -1,11 +1,13 @@
 ﻿using Bazic.Application.Interfaces;
 using Bazic.Application.ViewModels;
 using Bazic.Domain.Core.Notifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Bazic.Service.Api.Controllers
 {
+    [AllowAnonymous]
     [Route("/api/Contas")]
     public class ContasController : BaseController
     {
@@ -28,6 +30,15 @@ namespace Bazic.Service.Api.Controllers
             var contaCriada = await _contaService.Criar(model);
             if (contaCriada == null) return Response();
             return Response(contaCriada, "Conta Criada com Sucesso");
+        }
+        [HttpPost]
+        [Route("/api/Contas/Login")]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid) return Response();
+            bool resultLogin = await _contaService.Login(model);
+            if (resultLogin) return Response(null,"Login Realizado com Sucesso");
+            return Response();
         }
     }
 }
