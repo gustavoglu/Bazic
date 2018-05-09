@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bazic.Domain.Core.Notifications;
-using Bazic.Domain.Interfaces.Repositorys;
-using Bazic.Infra.Data.Context;
+﻿using Bazic.Domain.Core.Notifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bazic.Service.Api.Controllers
 {
+
     [Authorize]
     [Route("api/[controller]")]
     public class ValuesController : BaseController
