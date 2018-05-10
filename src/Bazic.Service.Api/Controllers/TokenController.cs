@@ -66,8 +66,8 @@ namespace Bazic.Service.Api.Controllers
             return Response( new
             {
                 authenticated = true,
-                created = dtCreation.ToString("yyyy - MM - dd HH: mm:ss"),
-                expiration = dtExpiration.ToString("yyyy - MM - dd HH: mm:ss"),
+                created = dtCreation.ToString("yyyy-MM-dd HH:mm:ss"),
+                expiration = dtExpiration.ToString("yyyy-MM-dd HH:mm:ss"),
                 accessToken = token,
                 message = "OK"
             },"Login realizado com sucesso");
