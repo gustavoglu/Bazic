@@ -21,4 +21,8 @@
     <Folder Include="ViewModels\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Bazic.Domain\Bazic.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

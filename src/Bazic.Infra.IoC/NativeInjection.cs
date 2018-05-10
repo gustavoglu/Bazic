@@ -3,6 +3,7 @@ using Bazic.Application.Services;
 using Bazic.Domain.Core.Notifications;
 using Bazic.Domain.Interfaces.Repositorys;
 using Bazic.Domain.Interfaces.UoW;
+using Bazic.Domain.Interfaces.User;
 using Bazic.Infra.Data.Context;
 using Bazic.Infra.Data.Repositorys;
 using Bazic.Infra.Data.UoW;
@@ -32,6 +33,10 @@ namespace Bazic.Infra.IoC
             //SERVICES
             service.AddScoped<IUsuarioService, UsuarioService>();
             service.AddScoped<IContaService, ContaService>();
+
+            //USER
+            service.AddScoped<IAspNetUser, AspNetUser>();
+
         }
     }
 }

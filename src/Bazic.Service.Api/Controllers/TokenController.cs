@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using Bazic.Infra.Identity.Interfaces;
 
 // This is a Token Example controller to generate the token to your API
-// To access use for ex Postman and call: http://localhost:{port}/api/token/auth
+// To access use for ex Postman and call: http://localhost:{port}/api/token
 
 namespace Bazic.Service.Api.Controllers
 {
@@ -41,7 +41,7 @@ namespace Bazic.Service.Api.Controllers
             string userId = usuario.Id;
 
             ClaimsIdentity identity = new ClaimsIdentity(
-                       new GenericIdentity(userId, "Login"),
+                       new GenericIdentity(userId, "IdUser"),
                        new[] {
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
                         new Claim(JwtRegisteredClaimNames.UniqueName, userId)
