@@ -8,4 +8,8 @@
     <ProjectReference Include="..\Bazic.Domain.Core\Bazic.Domain.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ValueObjects\" />
+  </ItemGroup>
+
 </Project>

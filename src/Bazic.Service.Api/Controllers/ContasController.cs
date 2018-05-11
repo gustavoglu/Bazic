@@ -1,6 +1,7 @@
 ﻿using Bazic.Application.Interfaces;
 using Bazic.Application.ViewModels;
 using Bazic.Domain.Core.Notifications;
+using Bazic.Domain.Interfaces.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -12,9 +13,11 @@ namespace Bazic.Service.Api.Controllers
     public class ContasController : BaseController
     {
         private readonly IContaService _contaService;
-        public ContasController(IContaService contaService, IDomainNotificationHandler<DomainNotification> notifications) : base(notifications)
+        private readonly IAspNetUser _user;
+        public ContasController(IContaService contaService, IDomainNotificationHandler<DomainNotification> notifications, IAspNetUser user) : base(notifications)
         {
             _contaService = contaService;
+            _user = user;
         }
 
         [HttpPost]
@@ -31,6 +34,7 @@ namespace Bazic.Service.Api.Controllers
             if (contaCriada == null) return Response();
             return Response(contaCriada, "Conta Criada com Sucesso");
         }
+
         [HttpPost]
         [Route("/api/Contas/Login")]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -40,5 +44,6 @@ namespace Bazic.Service.Api.Controllers
             if (resultLogin) return Response(null,"Login Realizado com Sucesso");
             return Response();
         }
+
     }
 }

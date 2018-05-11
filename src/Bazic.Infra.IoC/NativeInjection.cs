@@ -36,6 +36,7 @@ namespace Bazic.Infra.IoC
 
             //USER
             service.AddScoped<IAspNetUser, AspNetUser>();
+            service.AddScoped<IAcessosService, AcessosService>();
 
         }
     }

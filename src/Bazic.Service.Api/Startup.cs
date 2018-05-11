@@ -26,11 +26,15 @@ namespace Bazic.Service.Api
 
             IdentityStartupConfig.Config(services);
 
+            
+
             services.AddMvc().AddJsonOptions(opt => 
                 {
                     opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
+
+            PolicyStartupConfig.Config(services);
 
             NativeInjection.Configure(services);
         }
@@ -42,7 +46,7 @@ namespace Bazic.Service.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

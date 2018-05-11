@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Bazic.Infra.Identity.Acessos;
+using Bazic.Infra.Identity.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
@@ -8,6 +10,8 @@ namespace Bazic.Service.Api.Configurations
 {
     public class PolicyStartupConfig
     {
+        private static List<Acesso> Acessos { get { return AcessosList.Acessos; } }
+
         public static void Config(IServiceCollection services)
         {
             services.AddAuthorization(auth =>
@@ -22,21 +26,9 @@ namespace Bazic.Service.Api.Configurations
 
         private static void AdicionaPolicys(AuthorizationOptions opt)
         {
-            AdicionaAcesso(opt, "Acessos");
-        }
-
-        private static void AdicionaAcesso(AuthorizationOptions opt,string nomeAcesso, List<string> opcoes = null)
-        {
-            if(opcoes == null || !opcoes.Any())
-            {
-                opt.AddPolicy(nomeAcesso, pl => pl.RequireClaim("Visualizar"));
-                opt.AddPolicy(nomeAcesso, pl => pl.RequireClaim("Inserir"));
-                opt.AddPolicy(nomeAcesso, pl => pl.RequireClaim("Editar"));
-                opt.AddPolicy(nomeAcesso, pl => pl.RequireClaim("Excluir"));
-                return;
-            }
-
-            foreach (var opcao in opcoes) opt.AddPolicy(nomeAcesso, pl => pl.RequireClaim(opcao));
+            Acessos.ForEach(a => a.Opcoes.ToList()
+                                  .ForEach( o => opt.AddPolicy($"{o.Descricao}{o.Descricao}", 
+                                                               plc => plc.RequireClaim(a.Descricao,o.Descricao))));
         }
     }
 }
