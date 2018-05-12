@@ -61,7 +61,7 @@ namespace Bazic.Infra.Identity.Services
 
         public async Task<SignInResult> Login(string userName, string senha)
         {
-            return await _signInManager.PasswordSignInAsync(userName, senha, false, false);
+            return await _signInManager.PasswordSignInAsync(userName, senha, false,false);
         }
     }
 }

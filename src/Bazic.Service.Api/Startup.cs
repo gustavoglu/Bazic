@@ -26,8 +26,6 @@ namespace Bazic.Service.Api
 
             IdentityStartupConfig.Config(services);
 
-            
-
             services.AddMvc().AddJsonOptions(opt => 
                 {
                     opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

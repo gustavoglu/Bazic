@@ -23,10 +23,12 @@ namespace Bazic.Service.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "TESTE")]
+        //[AllowAnonymous]
+        [Authorize(Policy = "VisualizarAcessos")]
         [Route("/api/Contas/[controller]/{id_conta:Guid}")]
         public async Task<IActionResult> Get(Guid id_conta)
         {
+            var usuario = HttpContext;
             return Response( await _acessosService.TrazerAcessos(id_conta));
         }
 

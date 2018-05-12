@@ -75,7 +75,7 @@ namespace Bazic.Infra.Identity.Services
                                            from opcao in acessoNovo.Opcoes
                                            where !claims.ToList().Exists(c => c.Type == acessoNovo.Descricao && c.Value == opcao.Descricao) &&
                                                  opcao.Concedido
-                                           select new Claim(acessoNovo.Descricao,opcao.Descricao);
+                                           select new Claim(acessoNovo.Descricao,opcao.Descricao,opcao.Descricao);
 
             if (!claimsParaSeremInseridas.Any() && !claimsParaSeremRemovidas.Any())
                 return true;

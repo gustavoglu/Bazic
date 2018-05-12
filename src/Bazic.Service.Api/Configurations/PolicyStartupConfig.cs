@@ -21,7 +21,7 @@ namespace Bazic.Service.Api.Configurations
                     .RequireAuthenticatedUser().Build());
 
                 AdicionaPolicys(auth);
-                auth.AddPolicy("TESTE", opt => opt.RequireClaim("Visualizar"));
+                //auth.AddPolicy("TESTE", opt => opt.RequireClaim("Acessos"));
             });
         }
 
@@ -31,7 +31,7 @@ namespace Bazic.Service.Api.Configurations
             {
                 foreach (var opcao in acesso.Opcoes)
                 {
-                    opt.AddPolicy($"{opcao.Descricao}{acesso.Descricao}", plc => plc.RequireClaim(acesso.Descricao));
+                    opt.AddPolicy($"{opcao.Descricao}{acesso.Descricao}", plc => plc.RequireClaim(acesso.Descricao,opcao.Descricao));
                 }
             }
 
