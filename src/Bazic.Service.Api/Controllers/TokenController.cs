@@ -11,6 +11,9 @@ using Bazic.Domain.Core.Notifications;
 using Bazic.Application.Interfaces;
 using System.Threading.Tasks;
 using Bazic.Infra.Identity.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Bazic.Infra.Identity.Models;
+using Microsoft.AspNetCore.Identity;
 
 // This is a Token Example controller to generate the token to your API
 // To access use for ex Postman and call: http://localhost:{port}/api/token
@@ -24,10 +27,14 @@ namespace Bazic.Service.Api.Controllers
     {
         private readonly IContaService _contaService;
         private readonly IUsuarioService _usuarioService;
-        public TokenController(IDomainNotificationHandler<DomainNotification> notifications, IContaService contaService, IUsuarioService usuarioService) : base(notifications)
+        private readonly SignInManager<Usuario> _sign;
+        private readonly IHttpContextAccessor _accessor;
+        public TokenController(IDomainNotificationHandler<DomainNotification> notifications, IContaService contaService, IUsuarioService usuarioService, IHttpContextAccessor accessor, SignInManager<Usuario> sign) : base(notifications)
         {
             _contaService = contaService;
             _usuarioService = usuarioService;
+            _accessor = accessor;
+            _sign = sign;
         }
 
         [AllowAnonymous]
@@ -41,12 +48,16 @@ namespace Bazic.Service.Api.Controllers
             string userId = usuario.Id;
 
             ClaimsIdentity identity = new ClaimsIdentity(
-                       new GenericIdentity(userId, "IdUser"),
+                       new GenericIdentity(userId, "UserId"),
                        new[] {
+                        new Claim("TESTE","TESTE"),
+                        new Claim("IdUser",userId),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
                         new Claim(JwtRegisteredClaimNames.UniqueName, userId)
                        }
                    );
+
+
 
             DateTime dtCreation = DateTime.Now;
             DateTime dtExpiration = dtCreation + TimeSpan.FromSeconds(tokenConfigurations.Seconds);
@@ -62,6 +73,7 @@ namespace Bazic.Service.Api.Controllers
                 Expires = dtExpiration
             });
             var token = handler.WriteToken(securityToken);
+           
 
             return Response( new
             {

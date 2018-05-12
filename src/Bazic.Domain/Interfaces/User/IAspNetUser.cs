@@ -7,7 +7,7 @@ namespace Bazic.Domain.Interfaces.User
     public interface IAspNetUser
     {
         string GetUserAuthenticateName();
-        Guid GetUserAuthenticateId();
+        Guid? GetUserAuthenticateId();
         List<Claim> GetUserAuthenticateClaims();
         bool IsAuthenticate();
     }

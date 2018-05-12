@@ -1,4 +1,5 @@
 ﻿using Bazic.Domain.Core.Notifications;
+using Bazic.Domain.Interfaces.User;
 using Bazic.Infra.Identity.Interfaces;
 using Bazic.Infra.Identity.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -9,18 +10,20 @@ using System.Threading.Tasks;
 
 namespace Bazic.Service.Api.Controllers
 {
-    [AllowAnonymous]
+
     [Route("api/Contas/[controller]")]
     public class AcessosController : BaseController
     {
         private readonly IAcessosService _acessosService;
-        public AcessosController(IDomainNotificationHandler<DomainNotification> notifications, IAcessosService acessosService) : base(notifications)
+        private readonly IAspNetUser _user;
+        public AcessosController(IDomainNotificationHandler<DomainNotification> notifications, IAcessosService acessosService, IAspNetUser user) : base(notifications)
         {
             _acessosService = acessosService;
+            _user = user;
         }
 
         [HttpGet]
-        //[Authorize(Policy = "VisualizarAcessos")]
+        [Authorize(Policy = "TESTE")]
         [Route("/api/Contas/[controller]/{id_conta:Guid}")]
         public async Task<IActionResult> Get(Guid id_conta)
         {
@@ -28,9 +31,12 @@ namespace Bazic.Service.Api.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route("/api/Contas/[controller]/{id_conta:Guid}")]
         public async Task<IActionResult> Post(Guid id_conta, [FromBody] List<Acesso> acessos)
         {
+            var claims = _user.GetUserAuthenticateId();
+           
             return Response(await _acessosService.AtualizarAcessosConta(id_conta,acessos));
         }
     }

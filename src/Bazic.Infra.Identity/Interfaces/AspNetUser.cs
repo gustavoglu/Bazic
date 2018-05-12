@@ -21,8 +21,10 @@ namespace Bazic.Infra.Identity.Interfaces
             return _accessor.HttpContext.User.Claims.ToList();
         }
 
-        public Guid GetUserAuthenticateId()
+        public Guid? GetUserAuthenticateId()
         {
+            var id = _accessor.HttpContext.User.GetUserId();
+            if (id == null) return null;
             return Guid.Parse(_accessor.HttpContext.User.GetUserId());
         }
 

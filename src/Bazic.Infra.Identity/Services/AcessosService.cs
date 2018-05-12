@@ -61,35 +61,44 @@ namespace Bazic.Infra.Identity.Services
             var claims = await _userManager.GetClaimsAsync(usuario);
             var acessosConta = await TrazerAcessos(id_conta);
 
-            var claimsParaSeremRemovidas = from claim in claims
-                                         join acessoNovo in acessos on claim.Type equals acessoNovo.Descricao
-                                         from opcao in acessoNovo.Opcoes
-                                         where claims.ToList().Exists(c => c.Type == acessoNovo.Descricao && c.Value == opcao.Descricao) &&
-                                               !opcao.Concedido
-                                         select claim;
+            var acessosNaoConcedidos = from acesso in acessos
+                                       select new Acesso(acesso.Descricao, acesso.Opcoes.Where(o => !o.Concedido));
 
-            var claimsParaSeremInseridas = from claim in claims
-                                            join acessoNovo in acessos on claim.Type equals acessoNovo.Descricao
+            var claimsParaSeremRemovidas = (from claim in claims
+                                            from acessoNovo in acessosNaoConcedidos
                                             from opcao in acessoNovo.Opcoes
-                                            where !claims.ToList().Exists(c => c.Type == acessoNovo.Descricao && c.Value == opcao.Descricao) &&
-                                                  opcao.Concedido
-                                            select new Claim(acessoNovo.Descricao,opcao.Descricao);
+                                            where claim.Value == opcao.Descricao && claim.Type == acessoNovo.Descricao
+                                            select claim
+                                           ).Distinct();
 
-            if (!claimsParaSeremInseridas.Any() && !claimsParaSeremRemovidas.Any()) return true;
+            var claimsParaSeremInseridas = from acessoNovo in acessos
+                                           from opcao in acessoNovo.Opcoes
+                                           where !claims.ToList().Exists(c => c.Type == acessoNovo.Descricao && c.Value == opcao.Descricao) &&
+                                                 opcao.Concedido
+                                           select new Claim(acessoNovo.Descricao,opcao.Descricao);
 
-            var resultRemocao = await _userManager.RemoveClaimsAsync(usuario,claimsParaSeremRemovidas);
+            if (!claimsParaSeremInseridas.Any() && !claimsParaSeremRemovidas.Any())
+                return true;
 
-            if (!resultRemocao.Succeeded)
+            if (claimsParaSeremRemovidas.Any())
             {
-                NotificaErrosUserManager(resultRemocao);
-                return false;
+                var resultRemocao = await _userManager.RemoveClaimsAsync(usuario, claimsParaSeremRemovidas);
+
+                if (!resultRemocao.Succeeded)
+                {
+                    NotificaErrosUserManager(resultRemocao);
+                    return false;
+                }
             }
 
-            var resultInsercao = await _userManager.AddClaimsAsync(usuario, claimsParaSeremInseridas);
-            if (!resultInsercao.Succeeded)
+            if (claimsParaSeremInseridas.Any())
             {
-                NotificaErrosUserManager(resultInsercao);
-                return false;
+                var resultInsercao = await _userManager.AddClaimsAsync(usuario, claimsParaSeremInseridas);
+                if (!resultInsercao.Succeeded)
+                {
+                    NotificaErrosUserManager(resultInsercao);
+                    return false;
+                }
             }
 
             return true;
