@@ -28,7 +28,6 @@ namespace Bazic.Service.Api.Controllers
         [Route("/api/Contas/[controller]/{id_conta:Guid}")]
         public async Task<IActionResult> Get(Guid id_conta)
         {
-            var usuario = HttpContext;
             return Response( await _acessosService.TrazerAcessos(id_conta));
         }
 
@@ -37,8 +36,6 @@ namespace Bazic.Service.Api.Controllers
         [Route("/api/Contas/[controller]/{id_conta:Guid}")]
         public async Task<IActionResult> Post(Guid id_conta, [FromBody] List<Acesso> acessos)
         {
-            var claims = _user.GetUserAuthenticateId();
-           
             return Response(await _acessosService.AtualizarAcessosConta(id_conta,acessos));
         }
     }

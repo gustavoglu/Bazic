@@ -1,4 +1,5 @@
 ﻿using Bazic.Domain.Core.Notifications;
+using Bazic.Domain.Interfaces.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,14 +10,21 @@ namespace Bazic.Service.Api.Controllers
     [Route("api/[controller]")]
     public class ValuesController : BaseController
     {
-        public ValuesController(IDomainNotificationHandler<DomainNotification> notifications) : base(notifications)
+        private readonly IAspNetUser _user;
+        public ValuesController(IDomainNotificationHandler<DomainNotification> notifications, IAspNetUser user) : base(notifications)
         {
+            _user = user;
         }
 
         // GET api/values
+
+        [Authorize]
         [HttpGet]
         public IActionResult Get()
         {
+            var teste2 = HttpContext.User;
+            var teste = HttpContext.User.Identity;
+            var id_usuario = _user.GetUserAuthenticateId();
             return Response (new string[] { "value1", "value2" },"Ok");
         }
 

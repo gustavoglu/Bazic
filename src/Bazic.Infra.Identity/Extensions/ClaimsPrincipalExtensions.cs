@@ -11,7 +11,7 @@ namespace Bazic.Infra.Identity.Extensions
             {
                 throw new ArgumentException(nameof(principal));
             }
-            var claim = principal.FindFirst("id");
+            var claim = principal.FindFirst("id_usuario");
             return claim?.Value;
         }
     }

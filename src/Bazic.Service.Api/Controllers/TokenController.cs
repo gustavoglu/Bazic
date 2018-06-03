@@ -49,14 +49,11 @@ namespace Bazic.Service.Api.Controllers
             if (!resultLogin) return Response();
             var usuario = await _usuarioService.TrazerPorEmail(model.UserName);
             string userId = usuario.Id;
-            var claims = new List<Claim>();
-            claims.Add(new Claim("TESTE", "TESTE"));
-            claims.Add(new Claim("id", userId));
+            var claims = await _userManager.GetClaimsAsync(usuario);
+            claims.Add(new Claim("id_usuario", userId));
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")));
             claims.Add(new Claim(JwtRegisteredClaimNames.UniqueName, userId));
             ClaimsIdentity identity = new ClaimsIdentity(new GenericIdentity(userId, "UserId"),claims);
-
-
 
             DateTime dtCreation = DateTime.Now;
             DateTime dtExpiration = dtCreation + TimeSpan.FromSeconds(tokenConfigurations.Seconds);
@@ -81,6 +78,7 @@ namespace Bazic.Service.Api.Controllers
                 NotBefore = dtCreation,
                 Expires = dtExpiration
             });
+
             var token = handler.WriteToken(securityToken);
 
 
@@ -90,6 +88,8 @@ namespace Bazic.Service.Api.Controllers
                 created = dtCreation.ToString("yyyy-MM-dd HH:mm:ss"),
                 expiration = dtExpiration.ToString("yyyy-MM-dd HH:mm:ss"),
                 accessToken = token,
+                id_usuario = usuario.Id,
+                userName = usuario.UserName,
                 message = "OK"
             }, "Login realizado com sucesso");
 

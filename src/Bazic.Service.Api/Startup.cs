@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Bazic.Service.Api.JWTConfig;
 using Bazic.Service.Api.Configurations;
+using Bazic.Service.Api.Middlewares.ErrorException;
 
 namespace Bazic.Service.Api
 {
@@ -22,17 +23,16 @@ namespace Bazic.Service.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            JWTStartupConfig.Config(services, Configuration);
-
             IdentityStartupConfig.Config(services);
+            PolicyStartupConfig.Config(services);
+            JWTStartupConfig.Config(services, Configuration);
+           
 
             services.AddMvc().AddJsonOptions(opt => 
                 {
                     opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
-
-            PolicyStartupConfig.Config(services);
 
             NativeInjection.Configure(services);
         }
@@ -44,7 +44,9 @@ namespace Bazic.Service.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseErrorExceptionMiddleware();
             app.UseAuthentication();
+            
             app.UseMvc();
         }
     }

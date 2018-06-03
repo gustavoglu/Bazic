@@ -21,23 +21,12 @@ namespace Bazic.Service.Api.Configurations
                     .RequireAuthenticatedUser().Build());
 
                 AdicionaPolicys(auth);
-                //auth.AddPolicy("TESTE", opt => opt.RequireClaim("Acessos"));
             });
         }
 
         private static void AdicionaPolicys(AuthorizationOptions opt)
         {
-            foreach (var acesso in Acessos)
-            {
-                foreach (var opcao in acesso.Opcoes)
-                {
-                    opt.AddPolicy($"{opcao.Descricao}{acesso.Descricao}", plc => plc.RequireClaim(acesso.Descricao,opcao.Descricao));
-                }
-            }
-
-            //Acessos.ForEach(a => a.Opcoes.ToList()
-            //                      .ForEach( o => opt.AddPolicy($"{o.Descricao}{a.Descricao}", 
-            //                                                   plc => plc.RequireClaim(a.Descricao,o.Descricao))));
+            Acessos.ForEach(a => a.Opcoes.ToList().ForEach(o => opt.AddPolicy($"{o.Descricao}{a.Descricao}", plc => plc.RequireClaim(a.Descricao, o.Descricao))));
         }
     }
 }
