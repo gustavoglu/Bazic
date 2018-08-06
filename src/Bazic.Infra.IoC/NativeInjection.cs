@@ -29,6 +29,8 @@ namespace Bazic.Infra.IoC
             //REPOSITORY
             service.AddScoped<IContaRepository, ContaRepository>();
             service.AddScoped<IContaTipoRepository, ContaTipoRepository>();
+            service.AddScoped<IAcessoGrupoRepository, AcessoGrupoRepository>();
+            service.AddScoped<IAcessoGrupo_AcessoRepository, AcessoGrupo_AcessoRepository>();
 
             //SERVICES
             service.AddScoped<IUsuarioService, UsuarioService>();

@@ -15,12 +15,18 @@ namespace Bazic.Infra.Data.Context
     {
         public DbSet<Conta> Contas { get; set; }
         public DbSet<ContaTipo> ContaTipos { get; set; }
+        public DbSet<AcessoGrupo> AcessoGrupos { get; set; }
+        public DbSet<AcessoGrupo_Acesso> AcessoGrupo_Acessos { get; set; }
+        public DbSet<Conta_AcessoGrupo> Conta_AcessoGrupos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new ContaMap());
             modelBuilder.ApplyConfiguration(new ContaTipoMap());
+            modelBuilder.ApplyConfiguration(new AcessoGrupoMap());
+            modelBuilder.ApplyConfiguration(new AcessoGrupo_AcessoMap());
+            modelBuilder.ApplyConfiguration(new Conta_AcessoGrupoMap());
         }
 
         public override int SaveChanges()
